@@ -1,4 +1,4 @@
-package com.xingyuan.train.controller;
+package com.xingyuan.train.member.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package com.xingyuan.train.config;
+package com.xingyuan.train.member.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
