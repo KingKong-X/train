@@ -1,5 +1,7 @@
 package com.xingyuan.train.member.controller;
 
+import com.xingyuan.train.common.resp.CommonResp;
+import com.xingyuan.train.member.req.MemberRegisterReq;
 import com.xingyuan.train.member.service.MemberService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +19,8 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping("/register")
-    public long register(String mobile){
-        return memberService.register(mobile);
+    public CommonResp<Long> register(MemberRegisterReq req){
+        long register = memberService.register(req);
+        return new CommonResp<>(register);
     }
 }
