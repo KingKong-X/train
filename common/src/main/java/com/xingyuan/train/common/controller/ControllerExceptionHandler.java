@@ -20,8 +20,6 @@ public class ControllerExceptionHandler {
 
     /**
      * 所有异常统一处理
-     * @param e
-     * @return
      */
     @ExceptionHandler(value = Exception.class)
     public CommonResp exceptionHandler(Exception e){
@@ -32,6 +30,9 @@ public class ControllerExceptionHandler {
         return commonResp;
     }
 
+    /**
+     * 业务异常统一处理
+     */
     @ExceptionHandler(value = BusinessException.class)
     public CommonResp exceptionHandler(BusinessException e){
         CommonResp commonResp = new CommonResp();

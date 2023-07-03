@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 public class BusinessException extends RuntimeException{
     private BusinessExceptionEnum e;
 
+    /**
+     * 重写方法，这样不用写入堆栈
+     */
     @Override
     public synchronized Throwable fillInStackTrace() {
         return this;
