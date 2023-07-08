@@ -1,12 +1,15 @@
 package com.xingyuan.train.member.controller;
 
 import com.xingyuan.train.common.resp.CommonResp;
+import com.xingyuan.train.member.req.MemberLoginReq;
 import com.xingyuan.train.member.req.MemberRegisterReq;
 import com.xingyuan.train.member.req.MemberSendCodeReq;
+import com.xingyuan.train.member.resp.MemberLoginResp;
 import com.xingyuan.train.member.service.MemberService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +30,13 @@ public class MemberController {
     }
 
     @PostMapping("/send-code")
-    public CommonResp sendCode(@Valid MemberSendCodeReq req){
+    public CommonResp sendCode(@Valid @RequestBody MemberSendCodeReq req){
         memberService.sendCode(req);
         return new CommonResp<>();
+    }
+
+    @PostMapping("/login")
+    public CommonResp<MemberLoginResp> login(@Valid @RequestBody MemberLoginReq req){
+        return new CommonResp<>(memberService.login(req));
     }
 }
