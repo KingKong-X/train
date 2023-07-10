@@ -11,7 +11,7 @@ POST http://localhost:8000/member/member/send-code
 Content-Type: application/json
 
 {
-  "mobile":"13215962224"
+  "mobile": "13215962224"
 }
 
 ###
