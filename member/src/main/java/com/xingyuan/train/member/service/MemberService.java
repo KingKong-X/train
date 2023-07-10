@@ -3,7 +3,6 @@ package com.xingyuan.train.member.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.xingyuan.train.common.exception.BusinessException;
 import com.xingyuan.train.common.exception.BusinessExceptionEnum;
 import com.xingyuan.train.common.util.SnowUtil;
@@ -11,7 +10,6 @@ import com.xingyuan.train.member.domain.Member;
 import com.xingyuan.train.member.domain.MemberExample;
 import com.xingyuan.train.member.mapper.MemberMapper;
 import com.xingyuan.train.member.req.MemberLoginReq;
-import com.xingyuan.train.member.req.MemberRegisterReq;
 import com.xingyuan.train.member.req.MemberSendCodeReq;
 import com.xingyuan.train.member.resp.MemberLoginResp;
 import jakarta.annotation.Resource;
@@ -31,23 +29,6 @@ public class MemberService {
     @Resource
     private MemberMapper memberMapper;
 
-    public long register(MemberRegisterReq req){
-        String mobile = req.getMobile();
-
-        Member memberDB = selectByMobile(mobile);
-
-        if(ObjectUtil.isNotNull(memberDB)){
-            throw new BusinessException(BusinessExceptionEnum.MEMBER_MOBILE_EXIST);
-        }
-
-        Member member = new Member();
-        member.setId(SnowUtil.getSnowflakeNextId());
-        member.setMobile(mobile);
-        memberMapper.insert(member);
-
-        return member.getId();
-    }
-
     public void sendCode(MemberSendCodeReq req){
         String mobile=req.getMobile();
 
@@ -65,7 +46,8 @@ public class MemberService {
             LOG.info("手机号已存在，不插入记录");
         }
 
-        String code = RandomUtil.randomString(4);
+//        String code = RandomUtil.randomString(4);
+        String code = "8888";
         LOG.info("生成短信验证码：{}", code);
     }
 

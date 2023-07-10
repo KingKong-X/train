@@ -2,7 +2,6 @@ package com.xingyuan.train.member.controller;
 
 import com.xingyuan.train.common.resp.CommonResp;
 import com.xingyuan.train.member.req.MemberLoginReq;
-import com.xingyuan.train.member.req.MemberRegisterReq;
 import com.xingyuan.train.member.req.MemberSendCodeReq;
 import com.xingyuan.train.member.resp.MemberLoginResp;
 import com.xingyuan.train.member.service.MemberService;
@@ -22,12 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     @Resource
     private MemberService memberService;
-
-    @PostMapping("/register")
-    public CommonResp<Long> register(@Valid MemberRegisterReq req){
-        long register = memberService.register(req);
-        return new CommonResp<>(register);
-    }
 
     @PostMapping("/send-code")
     public CommonResp sendCode(@Valid @RequestBody MemberSendCodeReq req){
