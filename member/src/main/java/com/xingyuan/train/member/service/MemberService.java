@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.xingyuan.train.common.exception.BusinessException;
 import com.xingyuan.train.common.exception.BusinessExceptionEnum;
+import com.xingyuan.train.common.util.JwtUtil;
 import com.xingyuan.train.common.util.SnowUtil;
 import com.xingyuan.train.member.domain.Member;
 import com.xingyuan.train.member.domain.MemberExample;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Xingyuan Huang
@@ -46,7 +48,7 @@ public class MemberService {
             LOG.info("手机号已存在，不插入记录");
         }
 
-//        String code = RandomUtil.randomString(4);
+        // String code = RandomUtil.randomString(4);
         String code = "8888";
         LOG.info("生成短信验证码：{}", code);
     }
@@ -66,8 +68,12 @@ public class MemberService {
             throw new BusinessException(BusinessExceptionEnum.MEMBER_MOBILE_CODE_ERROR);
         }
 
-        return BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        MemberLoginResp memberLoginResp = BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        Map<String, Object> map = BeanUtil.beanToMap(memberLoginResp);
+        String token = JwtUtil.createToken(map);
+        memberLoginResp.setToken(token);
 
+        return memberLoginResp;
     }
 
     private Member selectByMobile(String mobile) {
