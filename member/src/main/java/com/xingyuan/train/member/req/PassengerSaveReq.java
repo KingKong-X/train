@@ -8,9 +8,10 @@ import java.util.Date;
 
 @Data
 public class PassengerSaveReq {
-    @NotNull(message = "【会员ID】不能为空")
+
     private Long id;
 
+    @NotNull(message = "【会员ID】不能为空")
     private Long memberId;
 
     @NotBlank(message = "【名字】不能为空")

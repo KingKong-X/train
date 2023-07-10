@@ -5,7 +5,6 @@ Accept: application/json
 
 GET http://localhost:8000/member/hello
 Accept: application/json
-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2ODg5NzcwOTUsIm1vYmlsZSI6IjEzMjE1OTYyMjI0IiwiaWQiOjE2NzcyOTk4NTUzMjU3OTQzMDQsImV4cCI6MTY4OTA2MzQ5NSwiaWF0IjoxNjg4OTc3MDk1fQ.qO0xJxH_-3CXdjdMDo2w32yYjgVRJnID1DFhebXSE7Q
 
 ###
 POST http://localhost:8000/member/member/send-code
@@ -23,3 +22,9 @@ Content-Type: application/json
   "mobile":"13215962224",
   "code":"8888"
 }
+
+> {%
+    client.log(JSON.stringify(response.body));
+    client.log(JSON.stringify(response.body.content.token));
+    client.global.set("token", response.body.content.token);
+%}
