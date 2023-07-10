@@ -22,9 +22,7 @@
 import { defineComponent, ref } from 'vue';
 import TheHeaderView from "@/components/the-header";
 import TheSiderView from "@/components/the-sider";
-import axios from "axios";
-import {notification} from "ant-design-vue";
-import store from "@/store";
+
 export default defineComponent({
   components: {
     TheSiderView,
