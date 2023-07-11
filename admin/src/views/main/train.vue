@@ -5,7 +5,7 @@
       <a-button type="primary" @click="onAdd">新增</a-button>
     </a-space>
   </p>
-  <a-table :dataSource="stations"
+  <a-table :dataSource="trains"
            :columns="columns"
            :pagination="pagination"
            @change="handleTableChange"
@@ -22,19 +22,45 @@
           <a @click="onEdit(record)">编辑</a>
         </a-space>
       </template>
+      <template v-else-if="column.dataIndex === 'type'">
+        <span v-for="item in TRAIN_TYPE_ARRAY" :key="item.code">
+          <span v-if="item.code === record.type">
+            {{item.desc}}
+          </span>
+        </span>
+      </template>
     </template>
   </a-table>
-  <a-modal v-model:visible="visible" title="车站" @ok="handleOk"
+  <a-modal v-model:visible="visible" title="车次" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
-    <a-form :model="station" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
-      <a-form-item label="站名">
-        <a-input v-model:value="station.name" />
+    <a-form :model="train" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
+      <a-form-item label="车次编号">
+        <a-input v-model:value="train.code" />
       </a-form-item>
-      <a-form-item label="站名拼音">
-        <a-input v-model:value="station.namePinyin" />
+      <a-form-item label="车次类型">
+        <a-select v-model:value="train.type">
+          <a-select-option v-for="item in TRAIN_TYPE_ARRAY" :key="item.code" :value="item.code">
+            {{item.desc}}
+          </a-select-option>
+        </a-select>
       </a-form-item>
-      <a-form-item label="站名拼音首字母">
-        <a-input v-model:value="station.namePy" />
+      <a-form-item label="始发站">
+        <a-input v-model:value="train.start" />
+      </a-form-item>
+      <a-form-item label="始发站拼音">
+        <a-input v-model:value="train.startPinyin" />
+      </a-form-item>
+      <a-form-item label="出发时间">
+        <a-time-picker v-model:value="train.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+      </a-form-item>
+      <a-form-item label="终点站">
+        <a-input v-model:value="train.end" />
+      </a-form-item>
+      <a-form-item label="终点站拼音">
+        <a-input v-model:value="train.endPinyin" />
+      </a-form-item>
+      <a-form-item label="到站时间">
+        <a-time-picker v-model:value="train.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -46,18 +72,24 @@ import {notification} from "ant-design-vue";
 import axios from "axios";
 
 export default defineComponent({
-  name: "station-view",
+  name: "train-view",
   setup() {
+    const TRAIN_TYPE_ARRAY = window.TRAIN_TYPE_ARRAY;
     const visible = ref(false);
-    let station = ref({
+    let train = ref({
       id: undefined,
-      name: undefined,
-      namePinyin: undefined,
-      namePy: undefined,
+      code: undefined,
+      type: undefined,
+      start: undefined,
+      startPinyin: undefined,
+      startTime: undefined,
+      end: undefined,
+      endPinyin: undefined,
+      endTime: undefined,
       createTime: undefined,
       updateTime: undefined,
     });
-    const stations = ref([]);
+    const trains = ref([]);
     // 分页的三个属性名是固定的
     const pagination = ref({
       total: 0,
@@ -67,19 +99,44 @@ export default defineComponent({
     let loading = ref(false);
     const columns = [
     {
-      title: '站名',
-      dataIndex: 'name',
-      key: 'name',
+      title: '车次编号',
+      dataIndex: 'code',
+      key: 'code',
     },
     {
-      title: '站名拼音',
-      dataIndex: 'namePinyin',
-      key: 'namePinyin',
+      title: '车次类型',
+      dataIndex: 'type',
+      key: 'type',
     },
     {
-      title: '站名拼音首字母',
-      dataIndex: 'namePy',
-      key: 'namePy',
+      title: '始发站',
+      dataIndex: 'start',
+      key: 'start',
+    },
+    {
+      title: '始发站拼音',
+      dataIndex: 'startPinyin',
+      key: 'startPinyin',
+    },
+    {
+      title: '出发时间',
+      dataIndex: 'startTime',
+      key: 'startTime',
+    },
+    {
+      title: '终点站',
+      dataIndex: 'end',
+      key: 'end',
+    },
+    {
+      title: '终点站拼音',
+      dataIndex: 'endPinyin',
+      key: 'endPinyin',
+    },
+    {
+      title: '到站时间',
+      dataIndex: 'endTime',
+      key: 'endTime',
     },
     {
       title: '操作',
@@ -88,17 +145,17 @@ export default defineComponent({
     ];
 
     const onAdd = () => {
-      station.value = {};
+      train.value = {};
       visible.value = true;
     };
 
     const onEdit = (record) => {
-      station.value = window.Tool.copy(record);
+      train.value = window.Tool.copy(record);
       visible.value = true;
     };
 
     const onDelete = (record) => {
-      axios.delete("/business/admin/station/delete/" + record.id).then((response) => {
+      axios.delete("/business/admin/train/delete/" + record.id).then((response) => {
         const data = response.data;
         if (data.success) {
           notification.success({description: "删除成功！"});
@@ -113,7 +170,7 @@ export default defineComponent({
     };
 
     const handleOk = () => {
-      axios.post("/business/admin/station/save", station.value).then((response) => {
+      axios.post("/business/admin/train/save", train.value).then((response) => {
         let data = response.data;
         if (data.success) {
           notification.success({description: "保存成功！"});
@@ -136,7 +193,7 @@ export default defineComponent({
         };
       }
       loading.value = true;
-      axios.get("/business/admin/station/query-list", {
+      axios.get("/business/admin/train/query-list", {
         params: {
           page: param.page,
           size: param.size
@@ -145,7 +202,7 @@ export default defineComponent({
         loading.value = false;
         let data = response.data;
         if (data.success) {
-          stations.value = data.content.list;
+          trains.value = data.content.list;
           // 设置分页控件的值
           pagination.value.current = param.page;
           pagination.value.total = data.content.total;
@@ -171,9 +228,10 @@ export default defineComponent({
     });
 
     return {
-      station,
+      TRAIN_TYPE_ARRAY,
+      train,
       visible,
-      stations,
+      trains,
       pagination,
       columns,
       handleTableChange,

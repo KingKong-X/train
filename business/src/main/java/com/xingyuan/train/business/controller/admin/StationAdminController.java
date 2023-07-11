@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/admin/station")
-public class StationController {
+public class StationAdminController {
     @Resource
     private StationService stationService;
 
