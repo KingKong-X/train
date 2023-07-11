@@ -2,6 +2,7 @@ package com.xingyuan.train.member.controller;
 
 import com.xingyuan.train.common.context.LoginMemberContext;
 import com.xingyuan.train.common.resp.CommonResp;
+import com.xingyuan.train.common.resp.PageResp;
 import com.xingyuan.train.member.req.MemberLoginReq;
 import com.xingyuan.train.member.req.MemberSendCodeReq;
 import com.xingyuan.train.member.req.PassengerQueryReq;
@@ -33,9 +34,9 @@ public class PassengerController {
     }
 
     @GetMapping("/query-list")
-    public CommonResp<List<PassengerQueryResp>> queryList(@Valid PassengerQueryReq req){
+    public CommonResp<PageResp<PassengerQueryResp>> queryList(@Valid PassengerQueryReq req){
         req.setMemberId(LoginMemberContext.getId());
-        List<PassengerQueryResp> respList = passengerService.queryList(req);
+        PageResp<PassengerQueryResp> respList = passengerService.queryList(req);
         return new CommonResp<>(respList);
     }
 

@@ -1,5 +1,7 @@
 package com.xingyuan.train.member.resp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.xingyuan.train.common.resp.PageResp;
 import lombok.Data;
 
 import java.util.Date;
@@ -16,8 +18,10 @@ public class PassengerQueryResp {
 
     private String type;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
     @Override
