@@ -34,26 +34,33 @@
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
+      <a-form-item label="会员id">
+        <a-input v-model:value="passenger.memberId" />
+      </a-form-item>
       <a-form-item label="姓名">
         <a-input v-model:value="passenger.name" />
       </a-form-item>
       <a-form-item label="身份证">
         <a-input v-model:value="passenger.idCard" />
       </a-form-item>
-      <a-form-item label="类型">
+      <a-form-item label="旅客类型">
         <a-select v-model:value="passenger.type">
-          <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+          <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.key" :value="item.key">
+            {{item.value}}
+          </a-select-option>
         </a-select>
       </a-form-item>
     </a-form>
   </a-modal>
 </template>
+
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import {notification} from "ant-design-vue";
 import axios from "axios";
 
 export default defineComponent({
+  name: "passenger-view",
   setup() {
     const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
     const visible = ref(false);
@@ -71,25 +78,35 @@ export default defineComponent({
     const pagination = ref({
       total: 0,
       current: 1,
-      pageSize: 2,
+      pageSize: 10,
     });
     let loading = ref(false);
-    const columns = [{
+    const columns = [
+    {
+      title: '会员id',
+      dataIndex: 'memberId',
+      key: 'memberId',
+    },
+    {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
-    }, {
+    },
+    {
       title: '身份证',
       dataIndex: 'idCard',
       key: 'idCard',
-    }, {
-      title: '类型',
+    },
+    {
+      title: '旅客类型',
       dataIndex: 'type',
       key: 'type',
-    }, {
+    },
+    {
       title: '操作',
       dataIndex: 'operation'
-    }];
+    }
+    ];
 
     const onAdd = () => {
       passenger.value = {};
@@ -178,19 +195,17 @@ export default defineComponent({
       PASSENGER_TYPE_ARRAY,
       passenger,
       visible,
-      onAdd,
-      handleOk,
       passengers,
       pagination,
       columns,
       handleTableChange,
       handleQuery,
       loading,
+      onAdd,
+      handleOk,
       onEdit,
       onDelete
     };
   },
 });
 </script>
-<style>
-</style>
