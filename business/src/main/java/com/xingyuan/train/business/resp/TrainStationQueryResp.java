@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class TrainQueryResp {
+public class TrainStationQueryResp {
 
     /**
      * id
@@ -19,44 +20,45 @@ public class TrainQueryResp {
     /**
      * 车次编号
      */
-    private String code;
+    private String trainCode;
 
     /**
-     * 车次类型|枚举[TrainTypeEnum]
+     * 站序
      */
-    private String type;
+    private Integer index;
 
     /**
-     * 始发站
+     * 站名
      */
-    private String start;
+    private String name;
 
     /**
-     * 始发站拼音
+     * 站名拼音
      */
-    private String startPinyin;
+    private String namePinyin;
 
     /**
-     * 出发时间
-     */
-    @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
-    private Date startTime;
-
-    /**
-     * 终点站
-     */
-    private String end;
-
-    /**
-     * 终点站拼音
-     */
-    private String endPinyin;
-
-    /**
-     * 到站时间
+     * 进站时间
      */
     @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
-    private Date endTime;
+    private Date inTime;
+
+    /**
+     * 出站时间
+     */
+    @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
+    private Date outTime;
+
+    /**
+     * 停站时长
+     */
+    @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
+    private Date stopTime;
+
+    /**
+     * 里程（公里）|从上一站到本站的距离
+     */
+    private BigDecimal km;
 
     /**
      * 新增时间
