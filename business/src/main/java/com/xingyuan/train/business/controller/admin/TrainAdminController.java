@@ -10,6 +10,8 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author Xingyuan Huang
  * @since 2023/7/11 21:17
@@ -36,5 +38,11 @@ public class TrainAdminController {
     public CommonResp<Object> delete(@PathVariable Long id) {
         trainService.delete(id);
         return new CommonResp<>();
+    }
+
+    @GetMapping("/query-all")
+    public CommonResp<List<TrainQueryResp>> queryList(){
+        List<TrainQueryResp> list = trainService.queryAll();
+        return new CommonResp<>(list);
     }
 }
