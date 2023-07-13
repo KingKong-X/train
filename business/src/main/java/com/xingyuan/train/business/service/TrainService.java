@@ -78,10 +78,14 @@ public class TrainService {
     }
 
     public List<TrainQueryResp> queryAll() {
+        List<Train> trains = selectAll();
+        return BeanUtil.copyToList(trains, TrainQueryResp.class);
+    }
+
+    public List<Train> selectAll() {
         TrainExample trainExample = new TrainExample();
         trainExample.setOrderByClause("code asc");
-        List<Train> trains = trainMapper.selectByExample(trainExample);
-        return BeanUtil.copyToList(trains, TrainQueryResp.class);
+        return trainMapper.selectByExample(trainExample);
     }
 
     private Train selectByUnique(String code) {
