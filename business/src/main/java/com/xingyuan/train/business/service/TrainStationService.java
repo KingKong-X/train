@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xingyuan.train.business.domain.Train;
 import com.xingyuan.train.business.domain.TrainStation;
 import com.xingyuan.train.business.domain.TrainStationExample;
 import com.xingyuan.train.business.mapper.TrainStationMapper;
@@ -108,5 +109,11 @@ public class TrainStationService {
         } else {
             return null;
         }
+    }
+
+    public List<TrainStation> selectByTrainCode(String trainCode){
+        TrainStationExample trainStationExample = new TrainStationExample();
+        TrainStationExample.Criteria criteria = trainStationExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        return trainStationMapper.selectByExample(trainStationExample);
     }
 }
