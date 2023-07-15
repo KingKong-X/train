@@ -46,4 +46,10 @@ public class PassengerController {
         return new CommonResp<>();
     }
 
+    @GetMapping("/query-mine")
+    public CommonResp<List<PassengerQueryResp>> queryMine(){
+        List<PassengerQueryResp> list = passengerService.queryMine();
+        return new CommonResp<>(list);
+    }
+
 }
