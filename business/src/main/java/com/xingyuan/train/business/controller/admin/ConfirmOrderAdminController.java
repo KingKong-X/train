@@ -1,7 +1,7 @@
 package com.xingyuan.train.business.controller.admin;
 
 import com.xingyuan.train.business.req.ConfirmOrderQueryReq;
-import com.xingyuan.train.business.req.ConfirmOrderSaveReq;
+import com.xingyuan.train.business.req.ConfirmOrderDoReq;
 import com.xingyuan.train.business.resp.ConfirmOrderQueryResp;
 import com.xingyuan.train.business.service.ConfirmOrderService;
 import com.xingyuan.train.common.resp.CommonResp;
@@ -18,7 +18,7 @@ public class ConfirmOrderAdminController {
     private ConfirmOrderService confirmOrderService;
 
     @PostMapping("/save")
-    public CommonResp<Object> save(@Valid @RequestBody ConfirmOrderSaveReq req) {
+    public CommonResp<Object> save(@Valid @RequestBody ConfirmOrderDoReq req) {
         confirmOrderService.save(req);
         return new CommonResp<>();
     }
