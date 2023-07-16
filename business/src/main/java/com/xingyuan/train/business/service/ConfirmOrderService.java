@@ -8,6 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xingyuan.train.business.domain.ConfirmOrder;
 import com.xingyuan.train.business.domain.ConfirmOrderExample;
+import com.xingyuan.train.business.domain.DailyTrainTicket;
 import com.xingyuan.train.business.enums.ConfirmOrderStatusEnum;
 import com.xingyuan.train.business.mapper.ConfirmOrderMapper;
 import com.xingyuan.train.business.req.ConfirmOrderQueryReq;
@@ -31,6 +32,9 @@ public class ConfirmOrderService {
 
     @Resource
     private ConfirmOrderMapper confirmOrderMapper;
+
+    @Resource
+    private DailyTrainTicketService dailyTrainTicketService;
 
     public void save(ConfirmOrderDoReq req) {
         DateTime now = DateTime.now();
@@ -76,7 +80,6 @@ public class ConfirmOrderService {
         // 省略业务数据校验，如：车次是否存在，余票是否存在，车次是否在有效期内，tickets条数>0，同乘客同车次是否已买过
         // 保存确认订单表，状态初始
         DateTime now = DateTime.now();
-
         ConfirmOrder confirmOrder = new ConfirmOrder();
         confirmOrder.setId(SnowUtil.getSnowflakeNextId());
         confirmOrder.setCreateTime(now);
@@ -88,8 +91,14 @@ public class ConfirmOrderService {
         confirmOrder.setDailyTrainTicketId(req.getDailyTrainTicketId());
         confirmOrder.setStatus(ConfirmOrderStatusEnum.INIT.getCode());
         confirmOrder.setTickets(JSON.toJSONString(req.getTickets()));
+        confirmOrder.setTrainCode(req.getTrainCode());
         confirmOrderMapper.insert(confirmOrder);
+
         // 查出余票记录，需要得到真实的库存
+        DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.selectByUnique(req.getDate(), req.getTrainCode(), req.getStart(), req.getEnd());
+        LOG.info("查出余票记录：{}", dailyTrainTicket);
+
+
 
         // 扣减余票数量，并判断余票是否足够
 

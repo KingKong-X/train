@@ -172,4 +172,17 @@ public class DailyTrainTicketService {
         }
         LOG.info("生成日期【{}】车次【{}】的余票信息结束", DateUtil.formatDate(date), trainCode);
     }
+
+    public DailyTrainTicket selectByUnique(Date date, String trainCode, String start, String end){
+        DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
+        dailyTrainTicketExample.createCriteria().andDateEqualTo(date).andTrainCodeEqualTo(trainCode)
+                .andStartEqualTo(start).andEndEqualTo(end);
+        List<DailyTrainTicket> dailyTrainTickets = dailyTrainTicketMapper.selectByExample(dailyTrainTicketExample);
+        if(CollUtil.isNotEmpty(dailyTrainTickets)){
+            return dailyTrainTickets.get(0);
+        }
+        else{
+            return null;
+        }
+    }
 }
