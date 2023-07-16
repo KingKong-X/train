@@ -2,6 +2,7 @@ package com.xingyuan.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.EnumUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -10,11 +11,15 @@ import com.xingyuan.train.business.domain.ConfirmOrder;
 import com.xingyuan.train.business.domain.ConfirmOrderExample;
 import com.xingyuan.train.business.domain.DailyTrainTicket;
 import com.xingyuan.train.business.enums.ConfirmOrderStatusEnum;
+import com.xingyuan.train.business.enums.SeatTypeEnum;
 import com.xingyuan.train.business.mapper.ConfirmOrderMapper;
 import com.xingyuan.train.business.req.ConfirmOrderQueryReq;
 import com.xingyuan.train.business.req.ConfirmOrderDoReq;
+import com.xingyuan.train.business.req.ConfirmOrderTicketReq;
 import com.xingyuan.train.business.resp.ConfirmOrderQueryResp;
 import com.xingyuan.train.common.context.LoginMemberContext;
+import com.xingyuan.train.common.exception.BusinessException;
+import com.xingyuan.train.common.exception.BusinessExceptionEnum;
 import com.xingyuan.train.common.resp.PageResp;
 import com.xingyuan.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
@@ -98,10 +103,8 @@ public class ConfirmOrderService {
         DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.selectByUnique(req.getDate(), req.getTrainCode(), req.getStart(), req.getEnd());
         LOG.info("查出余票记录：{}", dailyTrainTicket);
 
-
-
         // 扣减余票数量，并判断余票是否足够
-
+        reduceTickets(req, dailyTrainTicket);
         // 选座
 
         // 一个车箱一个车箱的获取座位数据
@@ -114,6 +117,43 @@ public class ConfirmOrderService {
         // 余票详情表修改余票；
         // 为会员增加购票记录
         // 更新确认订单为成功
+    }
+
+    private static void reduceTickets(ConfirmOrderDoReq req, DailyTrainTicket dailyTrainTicket) {
+        for(ConfirmOrderTicketReq ticketReq : req.getTickets()){
+            String seatTypeCode = ticketReq.getSeatTypeCode();
+            SeatTypeEnum seatTypeEnum = EnumUtil.getBy(SeatTypeEnum::getCode, seatTypeCode);
+            switch (seatTypeEnum){
+                case YDZ -> {
+                    int countLeft = dailyTrainTicket.getYdz() - 1;
+                    if(countLeft < 0){
+                        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR);
+                    }
+                    dailyTrainTicket.setYdz(countLeft);
+                }
+                case EDZ -> {
+                    int countLeft = dailyTrainTicket.getEdz() - 1;
+                    if(countLeft < 0){
+                        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR);
+                    }
+                    dailyTrainTicket.setEdz(countLeft);
+                }
+                case RW -> {
+                    int countLeft = dailyTrainTicket.getRw() - 1;
+                    if(countLeft < 0){
+                        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR);
+                    }
+                    dailyTrainTicket.setRw(countLeft);
+                }
+                case YW -> {
+                    int countLeft = dailyTrainTicket.getYw() - 1;
+                    if(countLeft < 0){
+                        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR);
+                    }
+                    dailyTrainTicket.setYw(countLeft);
+                }
+            }
+        }
     }
 
 }
