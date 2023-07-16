@@ -25,5 +25,6 @@ public class ConfirmOrder {
     private Date createTime;
 
     private Date updateTime;
+
     private String tickets;
 }
