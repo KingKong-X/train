@@ -166,7 +166,7 @@ public class ConfirmOrderService {
         }
         LOG.info("最终选座：{}", finalSeatList);
 
-        afterConfirmOrderService.afterDoConfirm(dailyTrainTicket, finalSeatList);
+        afterConfirmOrderService.afterDoConfirm(dailyTrainTicket, finalSeatList, req.getTickets(), confirmOrder);
 
         // 选座
 

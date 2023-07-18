@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
@@ -16,6 +17,7 @@ import org.springframework.core.env.Environment;
 @SpringBootApplication
 @ComponentScan("com.xingyuan")
 @MapperScan("com.xingyuan.train.*.mapper")
+@RefreshScope
 public class MemberApplication {
     private static final Logger LOG = LoggerFactory.getLogger(MemberApplication.class);
 
