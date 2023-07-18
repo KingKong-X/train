@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author Xingyuan Huang
  * @since 2023/7/18 11:34
  */
-@FeignClient(name = "member", url = "http://localhost:8001")
+@FeignClient(name = "member")
 public interface MemberFeign {
     @GetMapping("/member/feign/ticket/save")
     CommonResp<Object> save(@RequestBody MemberTicketReq req);

@@ -12,9 +12,9 @@ import java.util.Date;
  * @author Xingyuan Huang
  * @since 2023/7/13 9:46
  */
-@FeignClient(name = "business", url = "http://localhost:8002/business")
+@FeignClient("business")
 public interface BusinessFeign {
 
-    @GetMapping("/admin/daily-train/gen-daily/{date}")
+    @GetMapping("/business/admin/daily-train/gen-daily/{date}")
     CommonResp<Object> genDaily(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date);
 }
