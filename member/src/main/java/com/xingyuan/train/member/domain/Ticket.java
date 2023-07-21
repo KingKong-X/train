@@ -14,21 +14,21 @@ public class Ticket {
 
     private String passengerName;
 
-    private Date date;
+    private Date trainDate;
 
     private String trainCode;
 
     private Integer carriageIndex;
 
-    private String row;
+    private String seatRow;
 
-    private String col;
+    private String seatCol;
 
-    private String start;
+    private String startStation;
 
     private Date startTime;
 
-    private String end;
+    private String endStation;
 
     private Date endTime;
 

@@ -1,5 +1,6 @@
 package com.xingyuan.train.business.service;
 
+import cn.hutool.log.Log;
 import com.xingyuan.train.business.domain.ConfirmOrder;
 import com.xingyuan.train.business.domain.DailyTrainSeat;
 import com.xingyuan.train.business.domain.DailyTrainTicket;
@@ -50,7 +51,8 @@ public class AfterConfirmOrderService {
      */
     @Transactional
     public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> finalSeatList, List<ConfirmOrderTicketReq> tickets,
-                               ConfirmOrder confirmOrder){
+                               ConfirmOrder confirmOrder) throws Exception {
+        //LOG.info("seata全局事务ID: {}", RootContext.getXID());
         for(int j = 0; j < finalSeatList.size(); j++) {
             DailyTrainSeat dailyTrainSeat = finalSeatList.get(j);
             DailyTrainSeat seatForUpdate = new DailyTrainSeat();
@@ -115,14 +117,14 @@ public class AfterConfirmOrderService {
             memberTicketReq.setMemberId(LoginMemberContext.getId());
             memberTicketReq.setPassengerId(tickets.get(j).getPassengerId());
             memberTicketReq.setPassengerName(tickets.get(j).getPassengerName());
-            memberTicketReq.setDate(dailyTrainTicket.getDate());
+            memberTicketReq.setTrainDate(dailyTrainTicket.getDate());
             memberTicketReq.setTrainCode(dailyTrainTicket.getTrainCode());
             memberTicketReq.setCarriageIndex(dailyTrainSeat.getCarriageIndex());
-            memberTicketReq.setRow(dailyTrainSeat.getRow());
-            memberTicketReq.setCol(dailyTrainSeat.getCol());
-            memberTicketReq.setStart(dailyTrainTicket.getStart());
+            memberTicketReq.setSeatRow(dailyTrainSeat.getRow());
+            memberTicketReq.setSeatCol(dailyTrainSeat.getCol());
+            memberTicketReq.setStartStation(dailyTrainTicket.getStart());
             memberTicketReq.setStartTime(dailyTrainTicket.getStartTime());
-            memberTicketReq.setEnd(dailyTrainTicket.getEnd());
+            memberTicketReq.setEndStation(dailyTrainTicket.getEnd());
             memberTicketReq.setEndTime(dailyTrainTicket.getEndTime());
             memberTicketReq.setSeatType(dailyTrainSeat.getSeatType());
             CommonResp<Object> commonResp = memberFeign.save(memberTicketReq);

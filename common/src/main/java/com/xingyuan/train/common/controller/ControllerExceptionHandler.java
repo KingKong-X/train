@@ -1,5 +1,6 @@
 package com.xingyuan.train.common.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.xingyuan.train.common.exception.BusinessException;
 import com.xingyuan.train.common.resp.CommonResp;
 import org.slf4j.Logger;
@@ -23,7 +24,12 @@ public class ControllerExceptionHandler {
      * 所有异常统一处理
      */
     @ExceptionHandler(value = Exception.class)
-    public CommonResp exceptionHandler(Exception e){
+    public CommonResp exceptionHandler(Exception e) throws Exception{
+//        LOG.info("seata全局事务ID: {}", RootContext.getXID());
+//        // 如果是在一次全局事务里出异常了，就不要包装返回值，将异常抛给调用方，让调用方回滚事务
+//        if (StrUtil.isNotBlank(RootContext.getXID())) {
+//            throw e;
+//        }
         CommonResp commonResp = new CommonResp();
         LOG.error("系统异常", e);
         commonResp.setSuccess(false);

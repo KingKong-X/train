@@ -31,6 +31,7 @@ public class TicketService {
     private TicketMapper ticketMapper;
 
     public void save(MemberTicketReq req) {
+//        LOG.info("seata全局事务ID save: {}", RootContext.getXID());
         DateTime now = DateTime.now();
         Ticket ticket = BeanUtil.copyProperties(req, Ticket.class);
         ticket.setId(SnowUtil.getSnowflakeNextId());
